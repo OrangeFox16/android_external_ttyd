@@ -31,6 +31,15 @@ extern char **environ;
 #include "pty.h"
 #include "utils.h"
 
+#if defined(__ANDROID__)
+#include <termios.h>
+#include <sys/ioctl.h>
+int ttyd_android_forkpty(int *amaster, char *name,
+                         const struct termios *termp,
+                         const struct winsize *winp);
+#endif
+
+
 #ifdef _WIN32
 HRESULT (WINAPI *pCreatePseudoConsole)(COORD, HANDLE, HANDLE, DWORD, HPCON *);
 HRESULT (WINAPI *pResizePseudoConsole)(HPCON, COORD);
@@ -431,7 +440,7 @@ int pty_spawn(pty_process *process, pty_read_cb read_cb, pty_exit_cb exit_cb) {
 
   int master, pid;
   struct winsize size = {process->rows, process->columns, 0, 0};
-  pid = forkpty(&master, NULL, NULL, &size);
+  pid = ttyd_android_forkpty(&master, NULL, NULL, &size);
   if (pid < 0) {
     status = -errno;
     return status;

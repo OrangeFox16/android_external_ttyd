@@ -1,0 +1,64 @@
+package {
+    default_applicable_licenses: ["external_ttyd_license"],
+}
+
+license {
+    name: "external_ttyd_license",
+    visibility: [":__subpackages__"],
+    license_kinds: ["SPDX-license-identifier-MIT"],
+    license_text: ["LICENSE"],
+}
+
+cc_binary {
+    name: "ttyd_src",
+    stem: "ttyd",
+    recovery: true,
+
+    srcs: [
+        "src/android_lws_check.c",
+        "src/android_forkpty.c",
+        "src/utils.c",
+        "src/pty.c",
+        "src/protocol.c",
+        "src/http.c",
+        "src/server.c",
+    ],
+
+    local_include_dirs: [
+        "src",
+    ],
+
+    header_libs: [
+        "libuv_headers",
+        "libjson-c_headers",
+    ],
+
+    static_libs: [
+        "libwebsockets",
+        "libuv",
+        "libjson-c",
+    ],
+
+    shared_libs: [
+        "libz",
+        "libssl",
+        "libcrypto",
+    ],
+
+    c_std: "gnu99",
+
+    cflags: [
+        "-D_GNU_SOURCE",
+        "-DTTYD_VERSION=\"source-built-orangefox\"",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-missing-field-initializers",
+        "-Wno-unused-function",
+        "-Wno-unused-variable",
+        "-Wno-format",
+        "-Wno-error=macro-redefined",
+        "-Wno-macro-redefined",
+    ],
+
+    stl: "none",
+}
