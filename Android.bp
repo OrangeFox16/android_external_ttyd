@@ -63,3 +63,10 @@ cc_binary {
 
     stl: "none",
 }
+
+prebuilt_etc {
+    name: "ttyd.rc",
+    src: "ttyd.rc",
+    recovery: true,
+    sub_dir: "init",
+}
