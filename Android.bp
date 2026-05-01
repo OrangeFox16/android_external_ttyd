@@ -12,6 +12,7 @@ license {
 cc_binary {
     name: "ttyd_src",
     stem: "ttyd",
+    init_rc: ["ttyd.rc"],
     recovery: true,
 
     srcs: [
